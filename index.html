@@ -1,0 +1,4690 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090A0F">
+  <meta name="description" content="Mentora — премиальная платформа для поиска лучших преподавателей и персонального обучения.">
+
+  <title>Mentora — Учись у лучших</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* =========================================================
+       ROOT / DESIGN SYSTEM
+    ========================================================= */
+
+    :root {
+      --bg: #090A0F;
+      --bg-soft: #0D0F17;
+      --surface: rgba(18, 20, 29, 0.75);
+      --surface-solid: #12141D;
+      --surface-light: rgba(255, 255, 255, 0.045);
+
+      --indigo: #6366F1;
+      --purple: #A855F7;
+      --cyan: #06B6D4;
+
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.42);
+
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --pill: 100px;
+
+      --container: 1240px;
+
+      --shadow:
+        0 25px 80px rgba(0, 0, 0, 0.34);
+
+      --gradient:
+        linear-gradient(135deg, #6366F1 0%, #A855F7 50%, #06B6D4 100%);
+
+      --gradient-text:
+        linear-gradient(100deg, #818CF8 0%, #C084FC 48%, #22D3EE 100%);
+    }
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 5%, rgba(99, 102, 241, 0.09), transparent 28%),
+        radial-gradient(circle at 88% 22%, rgba(168, 85, 247, 0.075), transparent 25%),
+        var(--bg);
+      font-family: "Plus Jakarta Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      border: 0;
+      outline: 0;
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    ::selection {
+      color: #fff;
+      background: rgba(99, 102, 241, 0.55);
+    }
+
+    /* =========================================================
+       UTILITIES
+    ========================================================= */
+
+    .container {
+      width: min(var(--container), calc(100% - 48px));
+      margin-inline: auto;
+    }
+
+    .gradient-text {
+      color: transparent;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 13px;
+      border: 1px solid rgba(99, 102, 241, 0.24);
+      border-radius: var(--pill);
+      color: #A5B4FC;
+      background: rgba(99, 102, 241, 0.08);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #818CF8;
+      box-shadow: 0 0 12px #6366F1;
+    }
+
+    .section {
+      position: relative;
+      padding: 120px 0;
+    }
+
+    .section-heading {
+      max-width: 700px;
+      margin-bottom: 56px;
+    }
+
+    .section-heading.center {
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .section-title {
+      margin-top: 18px;
+      color: var(--text);
+      font-family: "Syne", sans-serif;
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 1.04;
+    }
+
+    .section-description {
+      max-width: 620px;
+      margin-top: 20px;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .section-heading.center .section-description {
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       BACKGROUND GLOWS
+    ========================================================= */
+
+    .ambient {
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(100px);
+    }
+
+    .ambient.indigo {
+      width: 420px;
+      height: 420px;
+      background: rgba(99, 102, 241, 0.11);
+    }
+
+    .ambient.purple {
+      width: 360px;
+      height: 360px;
+      background: rgba(168, 85, 247, 0.09);
+    }
+
+    .ambient.cyan {
+      width: 300px;
+      height: 300px;
+      background: rgba(6, 182, 212, 0.08);
+    }
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .header {
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 18px 0;
+      transition: 0.3s ease;
+    }
+
+    .header.scrolled {
+      padding: 12px 0;
+      background: rgba(9, 10, 15, 0.78);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "Syne", sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .logo-mark {
+      position: relative;
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 11px;
+      background: var(--gradient);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .logo-mark::before,
+    .logo-mark::after {
+      position: absolute;
+      content: "";
+      border: 2px solid rgba(255,255,255,0.9);
+      border-radius: 50%;
+    }
+
+    .logo-mark::before {
+      width: 16px;
+      height: 16px;
+    }
+
+    .logo-mark::after {
+      width: 7px;
+      height: 7px;
+      background: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      position: relative;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a::after {
+      position: absolute;
+      right: 0;
+      bottom: -7px;
+      left: 0;
+      height: 1px;
+      content: "";
+      transform: scaleX(0);
+      transform-origin: center;
+      background: var(--gradient);
+      transition: transform 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 0 19px;
+      border-radius: var(--pill);
+      font-size: 13px;
+      font-weight: 700;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      color: var(--text-muted);
+      background: transparent;
+    }
+
+    .btn-ghost:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--gradient);
+      box-shadow: 0 10px 35px rgba(99, 102, 241, 0.23);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 15px 45px rgba(99, 102, 241, 0.36);
+    }
+
+    .menu-btn {
+      display: none;
+      width: 43px;
+      height: 43px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: #fff;
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .hero {
+      position: relative;
+      min-height: 880px;
+      padding-top: 180px;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.35;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+      -webkit-mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    .hero-glow-one {
+      top: 80px;
+      left: -160px;
+    }
+
+    .hero-glow-two {
+      top: 180px;
+      right: -100px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 900px;
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .hero-title {
+      margin-top: 24px;
+      font-family: "Syne", sans-serif;
+      font-size: clamp(50px, 8vw, 94px);
+      font-weight: 700;
+      letter-spacing: -0.065em;
+      line-height: 0.98;
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .hero-description {
+      max-width: 650px;
+      margin: 27px auto 0;
+      color: var(--text-muted);
+      font-size: clamp(15px, 1.8vw, 18px);
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .hero-actions .btn {
+      min-height: 52px;
+      padding-inline: 25px;
+    }
+
+    .hero-microcopy {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin-top: 18px;
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+
+    .micro-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .micro-check {
+      color: #34D399;
+    }
+
+    /* =========================================================
+       HERO DASHBOARD
+    ========================================================= */
+
+    .hero-visual {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 85px auto 0;
+      perspective: 1400px;
+    }
+
+    .dashboard-shell {
+      position: relative;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
+      box-shadow:
+        0 40px 120px rgba(0,0,0,0.55),
+        0 0 100px rgba(99,102,241,0.11);
+      transform: rotateX(5deg);
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      min-height: 500px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 21px;
+      background: #0E1017;
+    }
+
+    .dashboard-sidebar {
+      padding: 22px 15px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.015);
+    }
+
+    .dash-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 10px;
+      margin-bottom: 30px;
+      color: #fff;
+      font-family: "Syne", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .dash-mini-logo {
+      width: 23px;
+      height: 23px;
+      border-radius: 7px;
+      background: var(--gradient);
+    }
+
+    .side-label {
+      padding: 0 10px;
+      margin: 18px 0 8px;
+      color: #475569;
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .side-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 10px;
+      margin-bottom: 3px;
+      border-radius: 9px;
+      color: #64748B;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .side-link.active {
+      color: #fff;
+      background: rgba(99,102,241,0.14);
+    }
+
+    .side-icon {
+      display: grid;
+      width: 17px;
+      height: 17px;
+      place-items: center;
+      font-size: 10px;
+    }
+
+    .dashboard-main {
+      padding: 26px;
+    }
+
+    .dash-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 24px;
+    }
+
+    .dash-title {
+      font-family: "Syne", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .dash-search {
+      width: 180px;
+      height: 31px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 9px;
+      background: rgba(255,255,255,0.03);
+      color: #64748B;
+      font-size: 9px;
+      padding: 0 12px;
+    }
+
+    .dash-featured {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 14px;
+    }
+
+    .dash-card {
+      padding: 17px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 15px;
+      background: rgba(255,255,255,0.025);
+    }
+
+    .dash-main-card {
+      position: relative;
+      min-height: 170px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(99,102,241,0.28), transparent 38%),
+        rgba(255,255,255,0.025);
+    }
+
+    .dash-main-card::after {
+      position: absolute;
+      right: -20px;
+      bottom: -55px;
+      width: 170px;
+      height: 170px;
+      content: "";
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6,182,212,0.18), transparent 65%);
+    }
+
+    .dash-card-label {
+      color: #64748B;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .dash-big {
+      margin-top: 7px;
+      font-family: "Syne", sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .dash-stat-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 7px;
+      color: #64748B;
+      font-size: 8px;
+    }
+
+    .up {
+      color: #34D399;
+    }
+
+    .dash-chart {
+      display: flex;
+      align-items: end;
+      gap: 7px;
+      height: 55px;
+      margin-top: 18px;
+    }
+
+    .chart-bar {
+      flex: 1;
+      min-width: 5px;
+      border-radius: 4px 4px 2px 2px;
+      background: linear-gradient(to top, #6366F1, #A855F7);
+      opacity: 0.75;
+    }
+
+    .dash-tutors {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mini-tutor {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 11px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .avatar {
+      display: grid;
+      flex: 0 0 auto;
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #312E81, #164E63);
+      color: #C7D2FE;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .avatar.purple {
+      background: linear-gradient(135deg, #581C87, #312E81);
+    }
+
+    .avatar.cyan {
+      background: linear-gradient(135deg, #164E63, #155E75);
+    }
+
+    .mini-tutor-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .mini-tutor-name {
+      color: #E2E8F0;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .mini-tutor-sub {
+      margin-top: 2px;
+      color: #64748B;
+      font-size: 7px;
+    }
+
+    .rating {
+      color: #FBBF24;
+      font-size: 8px;
+      white-space: nowrap;
+    }
+
+    /* =========================================================
+       STATS
+    ========================================================= */
+
+    .stats {
+      position: relative;
+      padding: 45px 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.012);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat {
+      position: relative;
+      padding: 10px 25px;
+      text-align: center;
+    }
+
+    .stat:not(:last-child)::after {
+      position: absolute;
+      top: 15%;
+      right: 0;
+      width: 1px;
+      height: 70%;
+      content: "";
+      background: rgba(255,255,255,0.07);
+    }
+
+    .stat-number {
+      font-family: "Syne", sans-serif;
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    .stat-label {
+      margin-top: 5px;
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    .search-section {
+      padding-top: 125px;
+    }
+
+    .search-box {
+      position: relative;
+      z-index: 2;
+      padding: 9px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      background: rgba(18,20,29,0.78);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.25);
+      backdrop-filter: blur(18px);
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr auto;
+      gap: 7px;
+    }
+
+    .search-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 57px;
+      padding: 0 16px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      background: rgba(255,255,255,0.035);
+      transition: 0.25s ease;
+    }
+
+    .search-field:focus-within {
+      border-color: rgba(99,102,241,0.4);
+      background: rgba(99,102,241,0.055);
+    }
+
+    .field-icon {
+      color: #6366F1;
+      font-size: 17px;
+    }
+
+    .search-field-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .search-label {
+      display: block;
+      margin-bottom: 2px;
+      color: #64748B;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .search-input,
+    .search-select {
+      width: 100%;
+      color: #E2E8F0;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .search-input::placeholder {
+      color: #64748B;
+    }
+
+    .search-select option {
+      color: #fff;
+      background: #12141D;
+    }
+
+    .search-button {
+      min-width: 130px;
+      border-radius: 14px;
+      color: #fff;
+      background: var(--gradient);
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(99,102,241,0.22);
+      transition: 0.25s ease;
+    }
+
+    .search-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(99,102,241,0.32);
+    }
+
+    /* =========================================================
+       TUTORS
+    ========================================================= */
+
+    .tutors-section {
+      padding-top: 95px;
+    }
+
+    .tutors-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .result-count {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .result-count strong {
+      color: #fff;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filter-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-pill {
+      flex: 0 0 auto;
+      min-height: 35px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: var(--pill);
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.025);
+      font-size: 10px;
+      font-weight: 700;
+      transition: 0.25s ease;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active {
+      border-color: rgba(99,102,241,0.35);
+      color: #fff;
+      background: rgba(99,102,241,0.13);
+    }
+
+    .tutors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .tutor-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition:
+        border-color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+      will-change: transform;
+    }
+
+    .tutor-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    }
+
+    .tutor-cover {
+      position: relative;
+      height: 145px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(99,102,241,0.25), transparent 35%),
+        linear-gradient(135deg, #15172A, #0F172A);
+    }
+
+    .tutor-cover::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      opacity: 0.45;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .cover-orb {
+      position: absolute;
+      top: 25px;
+      right: 40px;
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,85,247,0.45), rgba(99,102,241,0.05) 65%, transparent 70%);
+      filter: blur(2px);
+    }
+
+    .cover-orb.cyan {
+      background: radial-gradient(circle, rgba(6,182,212,0.42), rgba(99,102,241,0.05) 65%, transparent 70%);
+    }
+
+    .cover-orb.indigo {
+      background: radial-gradient(circle, rgba(99,102,241,0.48), rgba(168,85,247,0.05) 65%, transparent 70%);
+    }
+
+    .verified {
+      position: absolute;
+      top: 13px;
+      left: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 8px;
+      border: 1px solid rgba(52,211,153,0.18);
+      border-radius: var(--pill);
+      color: #6EE7B7;
+      background: rgba(16,185,129,0.1);
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .online {
+      position: absolute;
+      right: 13px;
+      bottom: 13px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #94A3B8;
+      font-size: 8px;
+    }
+
+    .online-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34D399;
+      box-shadow: 0 0 8px rgba(52,211,153,0.7);
+    }
+
+    .tutor-body {
+      position: relative;
+      padding: 0 20px 20px;
+    }
+
+    .tutor-avatar-large {
+      position: relative;
+      display: grid;
+      width: 64px;
+      height: 64px;
+      margin-top: -32px;
+      place-items: center;
+      border: 4px solid #12141D;
+      border-radius: 19px;
+      color: #E0E7FF;
+      background: linear-gradient(135deg, #3730A3, #7C3AED);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      font-family: "Syne", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .tutor-avatar-large.two {
+      background: linear-gradient(135deg, #0E7490, #4F46E5);
+    }
+
+    .tutor-avatar-large.three {
+      background: linear-gradient(135deg, #6D28D9, #BE185D);
+    }
+
+    .tutor-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .tutor-name {
+      font-family: "Syne", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    .tutor-role {
+      margin-top: 2px;
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    .tutor-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(251,191,36,0.08);
+      color: #FBBF24;
+      font-size: 9px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tutor-description {
+      min-height: 47px;
+      margin-top: 14px;
+      color: #94A3B8;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .tutor-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 7px;
+      color: #94A3B8;
+      background: rgba(255,255,255,0.025);
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    .tutor-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 16px;
+      margin-top: 17px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .price {
+      color: #fff;
+      font-family: "Syne", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .price span {
+      color: #64748B;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .book-btn {
+      min-height: 35px;
+      padding-inline: 14px;
+      color: #fff;
+      border-radius: 9px;
+      background: rgba(99,102,241,0.14);
+      border: 1px solid rgba(99,102,241,0.18);
+      font-size: 9px;
+      font-weight: 800;
+      transition: 0.25s ease;
+    }
+
+    .book-btn:hover {
+      background: var(--indigo);
+      border-color: var(--indigo);
+    }
+
+    /* =========================================================
+       CATEGORIES
+    ========================================================= */
+
+    .categories {
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255,255,255,0.012),
+        transparent
+      );
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .category-card {
+      position: relative;
+      min-height: 170px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.025);
+      transition: 0.3s ease;
+    }
+
+    .category-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99,102,241,0.3);
+      background: rgba(99,102,241,0.045);
+    }
+
+    .category-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 13px;
+      color: #A5B4FC;
+      background: rgba(99,102,241,0.1);
+      font-size: 18px;
+    }
+
+    .category-card h3 {
+      margin-top: 26px;
+      font-family: "Syne", sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .category-card p {
+      margin-top: 5px;
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    .category-arrow {
+      position: absolute;
+      right: 20px;
+      bottom: 19px;
+      color: #475569;
+      transition: 0.25s ease;
+    }
+
+    .category-card:hover .category-arrow {
+      color: #818CF8;
+      transform: translateX(3px);
+    }
+
+    /* =========================================================
+       FEATURES
+    ========================================================= */
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .feature-card {
+      position: relative;
+      min-height: 320px;
+      padding: 30px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at 90% 15%, rgba(99,102,241,0.09), transparent 35%),
+        rgba(18,20,29,0.72);
+      transition: 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(99,102,241,0.3);
+    }
+
+    .feature-card.large {
+      grid-row: span 2;
+      min-height: 658px;
+    }
+
+    .feature-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border: 1px solid rgba(99,102,241,0.22);
+      border-radius: 14px;
+      color: #A5B4FC;
+      background: rgba(99,102,241,0.1);
+      font-size: 19px;
+    }
+
+    .feature-card h3 {
+      margin-top: 27px;
+      font-family: "Syne", sans-serif;
+      font-size: 25px;
+      letter-spacing: -0.03em;
+    }
+
+    .feature-card p {
+      max-width: 470px;
+      margin-top: 11px;
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
+    .ai-visual {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      left: 30px;
+      height: 330px;
+      padding: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 17px;
+      background: #0D0F17;
+    }
+
+    .ai-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #CBD5E1;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .ai-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #A855F7;
+      box-shadow: 0 0 14px rgba(168,85,247,0.8);
+    }
+
+    .ai-message {
+      max-width: 85%;
+      padding: 12px;
+      margin-top: 18px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px 12px 12px 3px;
+      color: #94A3B8;
+      background: rgba(255,255,255,0.025);
+      font-size: 9px;
+      line-height: 1.65;
+    }
+
+    .ai-message.user {
+      margin-left: auto;
+      border-radius: 12px 12px 3px 12px;
+      color: #C7D2FE;
+      background: rgba(99,102,241,0.1);
+    }
+
+    .schedule-visual {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      left: 30px;
+      height: 105px;
+      padding: 13px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.025);
+    }
+
+    .schedule-row {
+      display: grid;
+      grid-template-columns: 50px repeat(5, 1fr);
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .schedule-cell {
+      min-height: 13px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .schedule-cell.active {
+      background: linear-gradient(90deg, rgba(99,102,241,0.5), rgba(168,85,247,0.5));
+    }
+
+    .security-visual {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      left: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 90px;
+      padding: 15px;
+      border: 1px solid rgba(52,211,153,0.1);
+      border-radius: 14px;
+      background: rgba(52,211,153,0.025);
+    }
+
+    .shield {
+      display: grid;
+      width: 43px;
+      height: 43px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 12px;
+      color: #6EE7B7;
+      background: rgba(52,211,153,0.09);
+    }
+
+    .security-title {
+      color: #CBD5E1;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .security-text {
+      margin-top: 3px;
+      color: #64748B;
+      font-size: 8px;
+    }
+
+    /* =========================================================
+       PROCESS
+    ========================================================= */
+
+    .process {
+      overflow: hidden;
+    }
+
+    .process-line {
+      position: absolute;
+      top: 50%;
+      right: 8%;
+      left: 8%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(99,102,241,0.3),
+        rgba(168,85,247,0.3),
+        transparent
+      );
+    }
+
+    .process-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .process-step {
+      position: relative;
+      padding: 27px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: rgba(18,20,29,0.72);
+    }
+
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #475569;
+      font-family: "Syne", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .step-icon {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border-radius: 12px;
+      color: #A5B4FC;
+      background: rgba(99,102,241,0.1);
+    }
+
+    .process-step h3 {
+      margin-top: 35px;
+      font-family: "Syne", sans-serif;
+      font-size: 17px;
+    }
+
+    .process-step p {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    /* =========================================================
+       TESTIMONIALS
+    ========================================================= */
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .testimonial {
+      padding: 25px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      transition: 0.3s ease;
+    }
+
+    .testimonial:hover {
+      transform: translateY(-3px);
+      border-color: rgba(168,85,247,0.25);
+    }
+
+    .quote-mark {
+      color: #6366F1;
+      font-family: Georgia, serif;
+      font-size: 38px;
+      line-height: 0.7;
+    }
+
+    .testimonial-text {
+      margin-top: 18px;
+      color: #CBD5E1;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      padding-top: 17px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .author-avatar {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 11px;
+      color: #C7D2FE;
+      background: linear-gradient(135deg, #312E81, #0E7490);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .author-name {
+      color: #E2E8F0;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .author-role {
+      margin-top: 2px;
+      color: #64748B;
+      font-size: 8px;
+    }
+
+    /* =========================================================
+       CTA
+    ========================================================= */
+
+    .cta {
+      padding-bottom: 130px;
+    }
+
+    .cta-card {
+      position: relative;
+      padding: 90px 30px;
+      overflow: hidden;
+      border: 1px solid rgba(99,102,241,0.22);
+      border-radius: 32px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 100%, rgba(6,182,212,0.14), transparent 45%),
+        radial-gradient(circle at 50% 0%, rgba(168,85,247,0.18), transparent 45%),
+        rgba(18,20,29,0.85);
+      box-shadow: 0 35px 100px rgba(0,0,0,0.35);
+    }
+
+    .cta-card::before {
+      position: absolute;
+      inset: 1px;
+      content: "";
+      border-radius: 31px;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    .cta-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-title {
+      max-width: 700px;
+      margin: 18px auto 0;
+      font-family: "Syne", sans-serif;
+      font-size: clamp(40px, 6vw, 68px);
+      letter-spacing: -0.055em;
+      line-height: 1.02;
+    }
+
+    .cta-text {
+      max-width: 550px;
+      margin: 20px auto 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .cta-button {
+      margin-top: 30px;
+      min-height: 54px;
+      padding-inline: 27px;
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    .footer {
+      padding: 60px 0 30px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      background: #08090D;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .footer-description {
+      max-width: 300px;
+      margin-top: 15px;
+      color: #64748B;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .footer-title {
+      margin-bottom: 14px;
+      color: #CBD5E1;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 9px;
+    }
+
+    .footer-links a {
+      width: fit-content;
+      color: #64748B;
+      font-size: 10px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 30px;
+      margin-top: 50px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: #475569;
+      font-size: 9px;
+    }
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    .modal {
+      position: fixed;
+      z-index: 2000;
+      inset: 0;
+      display: grid;
+      padding: 20px;
+      place-items: center;
+      opacity: 0;
+      visibility: hidden;
+      background: rgba(3,4,7,0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      position: relative;
+      width: min(480px, 100%);
+      padding: 30px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      background: #11131B;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.55);
+      transform: translateY(15px) scale(0.98);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.active .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 17px;
+      right: 17px;
+      display: grid;
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: #94A3B8;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .modal-title {
+      font-family: "Syne", sans-serif;
+      font-size: 27px;
+      letter-spacing: -0.035em;
+    }
+
+    .modal-description {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .modal-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #94A3B8;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .form-control {
+      width: 100%;
+      min-height: 45px;
+      padding: 0 13px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 11px;
+      color: #E2E8F0;
+      background: rgba(255,255,255,0.035);
+      font-size: 11px;
+      transition: 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: rgba(99,102,241,0.45);
+      background: rgba(99,102,241,0.045);
+    }
+
+    .form-control option {
+      color: #fff;
+      background: #11131B;
+    }
+
+    .modal-submit {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 5px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--gradient);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .success-message {
+      display: none;
+      padding: 20px;
+      margin-top: 20px;
+      border: 1px solid rgba(52,211,153,0.18);
+      border-radius: 13px;
+      color: #6EE7B7;
+      background: rgba(52,211,153,0.06);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    .toast {
+      position: fixed;
+      z-index: 3000;
+      right: 22px;
+      bottom: 22px;
+      max-width: 330px;
+      padding: 14px 17px;
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 13px;
+      color: #CBD5E1;
+      background: rgba(18,20,29,0.92);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      backdrop-filter: blur(16px);
+      transform: translateY(20px);
+      opacity: 0;
+      visibility: hidden;
+      font-size: 10px;
+      transition: 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* =========================================================
+       RESPONSIVE — <= 992px
+    ========================================================= */
+
+    @media (max-width: 992px) {
+      .container {
+        width: min(var(--container), calc(100% - 36px));
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 75px;
+        right: 18px;
+        left: 18px;
+        display: grid;
+        gap: 4px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(13,15,23,0.96);
+        box-shadow: 0 25px 70px rgba(0,0,0,0.45);
+        backdrop-filter: blur(20px);
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.25s ease;
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .nav-links a {
+        padding: 12px;
+        border-radius: 9px;
+      }
+
+      .nav-links a:hover {
+        background: rgba(255,255,255,0.035);
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .menu-btn {
+        display: grid;
+        place-items: center;
+      }
+
+      .nav-actions .btn-ghost {
+        display: none;
+      }
+
+      .dashboard {
+        grid-template-columns: 165px 1fr;
+      }
+
+      .search-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .search-button {
+        min-height: 57px;
+      }
+
+      .tutors-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-line {
+        display: none;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1.5fr repeat(3, 1fr);
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE — <= 576px
+    ========================================================= */
+
+    @media (max-width: 576px) {
+      .container {
+        width: min(var(--container), calc(100% - 28px));
+      }
+
+      .section {
+        padding: 80px 0;
+      }
+
+      .header {
+        padding: 13px 0;
+      }
+
+      .header.scrolled {
+        padding: 10px 0;
+      }
+
+      .logo {
+        font-size: 19px;
+      }
+
+      .logo-mark {
+        width: 31px;
+        height: 31px;
+      }
+
+      .nav-actions .btn-primary {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 125px;
+        padding-bottom: 70px;
+      }
+
+      .hero-title {
+        font-size: clamp(45px, 14vw, 70px);
+      }
+
+      .hero-description {
+        font-size: 13px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .hero-microcopy {
+        flex-wrap: wrap;
+        gap: 8px 13px;
+      }
+
+      .hero-visual {
+        margin-top: 55px;
+      }
+
+      .dashboard-shell {
+        padding: 5px;
+        border-radius: 19px;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+        min-height: 370px;
+        border-radius: 15px;
+      }
+
+      .dashboard-sidebar {
+        display: none;
+      }
+
+      .dashboard-main {
+        padding: 16px;
+      }
+
+      .dash-top {
+        margin-bottom: 15px;
+      }
+
+      .dash-title {
+        font-size: 14px;
+      }
+
+      .dash-search {
+        width: 110px;
+      }
+
+      .dash-featured {
+        grid-template-columns: 1fr;
+      }
+
+      .dash-main-card {
+        min-height: 140px;
+      }
+
+      .dash-tutors {
+        display: none;
+      }
+
+      .stats {
+        padding: 25px 0;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 0;
+      }
+
+      .stat:nth-child(2)::after {
+        display: none;
+      }
+
+      .stat-number {
+        font-size: 29px;
+      }
+
+      .stat-label {
+        font-size: 9px;
+      }
+
+      .search-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-button {
+        min-height: 52px;
+      }
+
+      .tutors-toolbar {
+        display: block;
+      }
+
+      .filter-pills {
+        margin-top: 15px;
+      }
+
+      .tutors-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .category-card {
+        min-height: 145px;
+        padding: 16px;
+      }
+
+      .category-card h3 {
+        margin-top: 19px;
+        font-size: 14px;
+      }
+
+      .category-card p {
+        font-size: 9px;
+      }
+
+      .category-arrow {
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card.large {
+        min-height: 550px;
+      }
+
+      .feature-card {
+        min-height: 270px;
+        padding: 22px;
+      }
+
+      .ai-visual {
+        right: 22px;
+        bottom: 22px;
+        left: 22px;
+        height: 280px;
+      }
+
+      .schedule-visual,
+      .security-visual {
+        right: 22px;
+        bottom: 22px;
+        left: 22px;
+      }
+
+      .process-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-card {
+        padding: 65px 20px;
+        border-radius: 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 35px 20px;
+      }
+
+      .footer-grid > div:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .modal-card {
+        padding: 23px;
+      }
+    }
+
+    /* =========================================================
+       ACCESSIBILITY
+    ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
+
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav">
+
+        <a href="#top" class="logo" aria-label="Mentora">
+          <span class="logo-mark"></span>
+          Mentora
+        </a>
+
+        <div class="nav-links" id="navLinks">
+          <a href="#tutors">Преподаватели</a>
+          <a href="#categories">Направления</a>
+          <a href="#features">Возможности</a>
+          <a href="#how">Как это работает</a>
+          <a href="#reviews">Отзывы</a>
+        </div>
+
+        <div class="nav-actions">
+          <button class="btn btn-ghost" id="loginBtn">
+            Войти
+          </button>
+
+          <button class="btn btn-primary" id="headerStartBtn">
+            Найти преподавателя
+          </button>
+
+          <button class="menu-btn" id="menuBtn" aria-label="Открыть меню">
+            ☰
+          </button>
+        </div>
+
+      </nav>
+    </div>
+  </header>
+
+
+  <main id="top">
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero">
+
+      <div class="hero-grid"></div>
+
+      <div class="ambient indigo hero-glow-one"></div>
+      <div class="ambient purple hero-glow-two"></div>
+
+      <div class="container">
+
+        <div class="hero-content">
+
+          <div class="eyebrow hero-animate">
+            <span class="eyebrow-dot"></span>
+            Персональное обучение нового поколения
+          </div>
+
+          <h1 class="hero-title hero-animate">
+            Учись у лучших.
+            <span class="gradient-text">Расти быстрее.</span>
+          </h1>
+
+          <p class="hero-description hero-animate">
+            Mentora помогает найти преподавателя, который подходит именно вам —
+            по цели, уровню, стилю обучения и бюджету.
+          </p>
+
+          <div class="hero-actions hero-animate">
+            <button class="btn btn-primary" id="heroSearchBtn">
+              Найти своего преподавателя
+              <span>→</span>
+            </button>
+
+            <a href="#how" class="btn btn-ghost">
+              Как это работает
+            </a>
+          </div>
+
+          <div class="hero-microcopy hero-animate">
+            <span class="micro-item">
+              <span class="micro-check">✓</span>
+              Проверенные преподаватели
+            </span>
+
+            <span class="micro-item">
+              <span class="micro-check">✓</span>
+              Гибкое расписание
+            </span>
+
+            <span class="micro-item">
+              <span class="micro-check">✓</span>
+              Безопасная оплата
+            </span>
+          </div>
+
+        </div>
+
+
+        <!-- Dashboard visual -->
+
+        <div class="hero-visual" id="heroVisual">
+
+          <div class="dashboard-shell">
+
+            <div class="dashboard">
+
+              <aside class="dashboard-sidebar">
+
+                <div class="dash-brand">
+                  <span class="dash-mini-logo"></span>
+                  Mentora
+                </div>
+
+                <div class="side-label">Workspace</div>
+
+                <div class="side-link active">
+                  <span class="side-icon">⌂</span>
+                  Обзор
+                </div>
+
+                <div class="side-link">
+                  <span class="side-icon">◎</span>
+                  Преподаватели
+                </div>
+
+                <div class="side-link">
+                  <span class="side-icon">◷</span>
+                  Расписание
+                </div>
+
+                <div class="side-link">
+                  <span class="side-icon">◇</span>
+                  Сообщения
+                </div>
+
+                <div class="side-label">Ваш прогресс</div>
+
+                <div class="side-link">
+                  <span class="side-icon">↗</span>
+                  Аналитика
+                </div>
+
+                <div class="side-link">
+                  <span class="side-icon">⚙</span>
+                  Настройки
+                </div>
+
+              </aside>
+
+
+              <div class="dashboard-main">
+
+                <div class="dash-top">
+                  <div class="dash-title">Добро пожаловать, Бобур</div>
+                  <input
+                    class="dash-search"
+                    placeholder="Поиск..."
+                    type="text"
+                    aria-label="Поиск"
+                  >
+                </div>
+
+                <div class="dash-featured">
+
+                  <div class="dash-card dash-main-card">
+
+                    <div class="dash-card-label">
+                      Прогресс обучения
+                    </div>
+
+                    <div class="dash-big">
+                      78%
+                    </div>
+
+                    <div class="dash-stat-row">
+                      <span class="up">↑ 12.4%</span>
+                      за последние 30 дней
+                    </div>
+
+                    <div class="dash-chart">
+                      <span class="chart-bar" style="height:32%"></span>
+                      <span class="chart-bar" style="height:47%"></span>
+                      <span class="chart-bar" style="height:40%"></span>
+                      <span class="chart-bar" style="height:62%"></span>
+                      <span class="chart-bar" style="height:54%"></span>
+                      <span class="chart-bar" style="height:78%"></span>
+                      <span class="chart-bar" style="height:91%"></span>
+                    </div>
+
+                  </div>
+
+
+                  <div class="dash-tutors">
+
+                    <div class="mini-tutor">
+                      <div class="avatar">АК</div>
+
+                      <div class="mini-tutor-info">
+                        <div class="mini-tutor-name">
+                          Анна Ким
+                        </div>
+                        <div class="mini-tutor-sub">
+                          Английский · C1
+                        </div>
+                      </div>
+
+                      <div class="rating">
+                        ★ 4.9
+                      </div>
+                    </div>
+
+                    <div class="mini-tutor">
+                      <div class="avatar purple">ДМ</div>
+
+                      <div class="mini-tutor-info">
+                        <div class="mini-tutor-name">
+                          Даниил Миронов
+                        </div>
+                        <div class="mini-tutor-sub">
+                          Математика · SAT
+                        </div>
+                      </div>
+
+                      <div class="rating">
+                        ★ 5.0
+                      </div>
+                    </div>
+
+                    <div class="mini-tutor">
+                      <div class="avatar cyan">НР</div>
+
+                      <div class="mini-tutor-info">
+                        <div class="mini-tutor-name">
+                          Никита Рахимов
+                        </div>
+                        <div class="mini-tutor-sub">
+                          Python · Junior
+                        </div>
+                      </div>
+
+                      <div class="rating">
+                        ★ 4.9
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <section class="stats">
+
+      <div class="container">
+
+        <div class="stats-grid">
+
+          <div class="stat">
+            <div class="stat-number gradient-text">12K+</div>
+            <div class="stat-label">активных студентов</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-number">2.4K</div>
+            <div class="stat-label">преподавателей</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-number">98%</div>
+            <div class="stat-label">положительных отзывов</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-number">4.9</div>
+            <div class="stat-label">средний рейтинг</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <section class="section search-section" id="search">
+
+      <div class="ambient cyan" style="top:100px; left:-180px;"></div>
+
+      <div class="container">
+
+        <div class="section-heading">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Найдите своего ментора
+          </div>
+
+          <h2 class="section-title">
+            Обучение начинается<br>
+            <span class="gradient-text">с правильного человека.</span>
+          </h2>
+
+          <p class="section-description">
+            Опишите свою цель, выберите направление и найдите преподавателя,
+            который соответствует вашему темпу и уровню.
+          </p>
+        </div>
+
+
+        <div class="search-box">
+
+          <div class="search-grid">
+
+            <div class="search-field">
+
+              <div class="field-icon">⌕</div>
+
+              <div class="search-field-content">
+                <span class="search-label">Что хотите изучать?</span>
+
+                <input
+                  id="subjectInput"
+                  class="search-input"
+                  type="text"
+                  placeholder="Например, английский"
+                >
+              </div>
+
+            </div>
+
+
+            <div class="search-field">
+
+              <div class="field-icon">◈</div>
+
+              <div class="search-field-content">
+                <span class="search-label">Уровень</span>
+
+                <select id="levelSelect" class="search-select">
+                  <option value="all">Любой уровень</option>
+                  <option value="beginner">Начинающий</option>
+                  <option value="intermediate">Средний</option>
+                  <option value="advanced">Продвинутый</option>
+                </select>
+              </div>
+
+            </div>
+
+
+            <div class="search-field">
+
+              <div class="field-icon">₽</div>
+
+              <div class="search-field-content">
+                <span class="search-label">Бюджет</span>
+
+                <select id="priceSelect" class="search-select">
+                  <option value="all">Любой бюджет</option>
+                  <option value="low">До 150 000 сум</option>
+                  <option value="medium">150–250 тыс. сум</option>
+                  <option value="high">250+ тыс. сум</option>
+                </select>
+              </div>
+
+            </div>
+
+
+            <button class="search-button" id="searchButton">
+              Найти преподавателя
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TUTORS
+    ====================================================== -->
+
+    <section class="section tutors-section" id="tutors">
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Рекомендации Mentora
+          </div>
+
+          <h2 class="section-title">
+            Преподаватели,<br>
+            <span class="gradient-text">которым доверяют.</span>
+          </h2>
+
+          <p class="section-description">
+            Все преподаватели проходят проверку профиля и подтверждают
+            квалификацию перед публикацией.
+          </p>
+
+        </div>
+
+
+        <div class="tutors-toolbar">
+
+          <div class="result-count">
+            Найдено <strong id="resultCount">6</strong> преподавателей
+          </div>
+
+          <div class="filter-pills">
+
+            <button class="filter-pill active" data-filter="all">
+              Все
+            </button>
+
+            <button class="filter-pill" data-filter="english">
+              Английский
+            </button>
+
+            <button class="filter-pill" data-filter="math">
+              Математика
+            </button>
+
+            <button class="filter-pill" data-filter="programming">
+              Программирование
+            </button>
+
+            <button class="filter-pill" data-filter="design">
+              Дизайн
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="tutors-grid" id="tutorsGrid">
+
+          <!-- Tutor 1 -->
+
+          <article class="tutor-card tilt-card" data-category="english">
+
+            <div class="tutor-cover">
+              <div class="cover-orb"></div>
+
+              <div class="verified">
+                ✓ Проверен
+              </div>
+
+              <div class="online">
+                <span class="online-dot"></span>
+                Сейчас онлайн
+              </div>
+            </div>
+
+            <div class="tutor-body">
+
+              <div class="tutor-avatar-large">
+                АК
+              </div>
+
+              <div class="tutor-top">
+
+                <div>
+                  <h3 class="tutor-name">
+                    Анна Ким
+                  </h3>
+
+                  <div class="tutor-role">
+                    Английский язык · IELTS
+                  </div>
+                </div>
+
+                <div class="tutor-rating">
+                  ★ 4.9
+                </div>
+
+              </div>
+
+              <p class="tutor-description">
+                Помогаю подготовиться к IELTS и уверенно заговорить
+                на английском без зубрёжки.
+              </p>
+
+              <div class="tutor-tags">
+                <span class="tag">IELTS 8.5</span>
+                <span class="tag">7 лет опыта</span>
+                <span class="tag">C1–C2</span>
+              </div>
+
+              <div class="tutor-footer">
+
+                <div class="price">
+                  180 000 <span>сум / урок</span>
+                </div>
+
+                <button
+                  class="book-btn"
+                  data-tutor="Анна Ким"
+                >
+                  Забронировать
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- Tutor 2 -->
+
+          <article class="tutor-card tilt-card" data-category="math">
+
+            <div class="tutor-cover">
+              <div class="cover-orb indigo"></div>
+
+              <div class="verified">
+                ✓ Проверен
+              </div>
+
+              <div class="online">
+                <span class="online-dot"></span>
+                Сейчас онлайн
+              </div>
+            </div>
+
+            <div class="tutor-body">
+
+              <div class="tutor-avatar-large two">
+                ДМ
+              </div>
+
+              <div class="tutor-top">
+
+                <div>
+                  <h3 class="tutor-name">
+                    Даниил Миронов
+                  </h3>
+
+                  <div class="tutor-role">
+                    Математика · SAT · ЕГЭ
+                  </div>
+                </div>
+
+                <div class="tutor-rating">
+                  ★ 5.0
+                </div>
+
+              </div>
+
+              <p class="tutor-description">
+                Разбираем сложные темы простым языком и строим
+                стратегию подготовки под ваш результат.
+              </p>
+
+              <div class="tutor-tags">
+                <span class="tag">SAT 780</span>
+                <span class="tag">9 лет опыта</span>
+                <span class="tag">Экзамены</span>
+              </div>
+
+              <div class="tutor-footer">
+
+                <div class="price">
+                  220 000 <span>сум / урок</span>
+                </div>
+
+                <button
+                  class="book-btn"
+                  data-tutor="Даниил Миронов"
+                >
+                  Забронировать
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- Tutor 3 -->
+
+          <article class="tutor-card tilt-card" data-category="programming">
+
+            <div class="tutor-cover">
+              <div class="cover-orb cyan"></div>
+
+              <div class="verified">
+                ✓ Проверен
+              </div>
+
+              <div class="online">
+                <span class="online-dot"></span>
+                Сейчас онлайн
+              </div>
+            </div>
+
+            <div class="tutor-body">
+
+              <div class="tutor-avatar-large three">
+                НР
+              </div>
+
+              <div class="tutor-top">
+
+                <div>
+                  <h3 class="tutor-name">
+                    Никита Рахимов
+                  </h3>
+
+                  <div class="tutor-role">
+                    Python · Data Science
+                  </div>
+                </div>
+
+                <div class="tutor-rating">
+                  ★ 4.9
+                </div>
+
+              </div>
+
+              <p class="tutor-description">
+                От первого Python-скрипта до полноценного проекта
+                в портфолио. Только практика и реальные задачи.
+              </p>
+
+              <div class="tutor-tags">
+                <span class="tag">Python</span>
+                <span class="tag">5 лет опыта</span>
+                <span class="tag">Проекты</span>
+              </div>
+
+              <div class="tutor-footer">
+
+                <div class="price">
+                  200 000 <span>сум / урок</span>
+                </div>
+
+                <button
+                  class="book-btn"
+                  data-tutor="Никита Рахимов"
+                >
+                  Забронировать
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- Tutor 4 -->
+
+          <article class="tutor-card tilt-card" data-category="design">
+
+            <div class="tutor-cover">
+              <div class="cover-orb purple"></div>
+
+              <div class="verified">
+                ✓ Проверен
+              </div>
+
+              <div class="online">
+                <span class="online-dot"></span>
+                Сейчас онлайн
+              </div>
+            </div>
+
+            <div class="tutor-body">
+
+              <div class="tutor-avatar-large">
+                МС
+              </div>
+
+              <div class="tutor-top">
+
+                <div>
+                  <h3 class="tutor-name">
+                    Малика Саидова
+                  </h3>
+
+                  <div class="tutor-role">
+                    UI/UX Design · Figma
+                  </div>
+                </div>
+
+                <div class="tutor-rating">
+                  ★ 4.8
+                </div>
+
+              </div>
+
+              <p class="tutor-description">
+                Научу проектировать интерфейсы, собирать сильное
+                портфолио и мыслить как продуктовый дизайнер.
+              </p>
+
+              <div class="tutor-tags">
+                <span class="tag">Figma</span>
+                <span class="tag">8 лет опыта</span>
+                <span class="tag">UX</span>
+              </div>
+
+              <div class="tutor-footer">
+
+                <div class="price">
+                  250 000 <span>сум / урок</span>
+                </div>
+
+                <button
+                  class="book-btn"
+                  data-tutor="Малика Саидова"
+                >
+                  Забронировать
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- Tutor 5 -->
+
+          <article class="tutor-card tilt-card" data-category="english">
+
+            <div class="tutor-cover">
+              <div class="cover-orb cyan"></div>
+
+              <div class="verified">
+                ✓ Проверен
+              </div>
+
+              <div class="online">
+                <span class="online-dot"></span>
+                Сейчас онлайн
+              </div>
+            </div>
+
+            <div class="tutor-body">
+
+              <div class="tutor-avatar-large two">
+                АР
+              </div>
+
+              <div class="tutor-top">
+
+                <div>
+                  <h3 class="tutor-name">
+                    Азиза Рустамова
+                  </h3>
+
+                  <div class="tutor-role">
+                    Английский · Conversation
+                  </div>
+                </div>
+
+                <div class="tutor-rating">
+                  ★ 4.9
+                </div>
+
+              </div>
+
+              <p class="tutor-description">
+                Разговорный английский для работы, путешествий
+                и уверенного общения в реальной жизни.
+              </p>
+
+              <div class="tutor-tags">
+                <span class="tag">Speaking</span>
+                <span class="tag">6 лет опыта</span>
+                <span class="tag">B1–C1</span>
+              </div>
+
+              <div class="tutor-footer">
+
+                <div class="price">
+                  140 000 <span>сум / урок</span>
+                </div>
+
+                <button
+                  class="book-btn"
+                  data-tutor="Азиза Рустамова"
+                >
+                  Забронировать
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- Tutor 6 -->
+
+          <article class="tutor-card tilt-card" data-category="math">
+
+            <div class="tutor-cover">
+              <div class="cover-orb indigo"></div>
+
+              <div class="verified">
+                ✓ Проверен
+              </div>
+
+              <div class="online">
+                <span class="online-dot"></span>
+                Сейчас онлайн
+              </div>
+            </div>
+
+            <div class="tutor-body">
+
+              <div class="tutor-avatar-large three">
+                ОК
+              </div>
+
+              <div class="tutor-top">
+
+                <div>
+                  <h3 class="tutor-name">
+                    Олег Ковалёв
+                  </h3>
+
+                  <div class="tutor-role">
+                    Математика · Алгебра
+                  </div>
+                </div>
+
+                <div class="tutor-rating">
+                  ★ 4.9
+                </div>
+
+              </div>
+
+              <p class="tutor-description">
+                Выстраиваю фундамент знаний и помогаю перестать
+                бояться математики даже с нулевого уровня.
+              </p>
+
+              <div class="tutor-tags">
+                <span class="tag">Алгебра</span>
+                <span class="tag">11 лет опыта</span>
+                <span class="tag">1–11 класс</span>
+              </div>
+
+              <div class="tutor-footer">
+
+                <div class="price">
+                  130 000 <span>сум / урок</span>
+                </div>
+
+                <button
+                  class="book-btn"
+                  data-tutor="Олег Ковалёв"
+                >
+                  Забронировать
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CATEGORIES
+    ====================================================== -->
+
+    <section class="section categories" id="categories">
+
+      <div class="ambient purple" style="right:-180px; top:100px;"></div>
+
+      <div class="container">
+
+        <div class="section-heading center">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Направления
+          </div>
+
+          <h2 class="section-title">
+            Учитесь тому,<br>
+            <span class="gradient-text">что действительно нужно.</span>
+          </h2>
+
+          <p class="section-description">
+            От школьных предметов до навыков, которые помогают
+            строить карьеру в современной экономике.
+          </p>
+
+        </div>
+
+
+        <div class="category-grid">
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">A</div>
+            <h3>Английский язык</h3>
+            <p>IELTS, разговорный, Business English</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">∑</div>
+            <h3>Математика</h3>
+            <p>Школа, университет, SAT, GMAT</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">&lt;/&gt;</div>
+            <h3>Программирование</h3>
+            <p>Python, JavaScript, Web, Data</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">✦</div>
+            <h3>Дизайн</h3>
+            <p>UI/UX, Figma, графический дизайн</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">◉</div>
+            <h3>Экономика</h3>
+            <p>Микроэкономика, макроэкономика</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">₿</div>
+            <h3>Финансы</h3>
+            <p>Инвестиции, accounting, valuation</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">文</div>
+            <h3>Языки</h3>
+            <p>Корейский, немецкий, китайский</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+          <div class="category-card tilt-card">
+            <div class="category-icon">+</div>
+            <h3>Ещё 40+ направлений</h3>
+            <p>Найдите то, что интересно именно вам</p>
+            <span class="category-arrow">→</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FEATURES
+    ====================================================== -->
+
+    <section class="section" id="features">
+
+      <div class="ambient indigo" style="left:-200px; top:300px;"></div>
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Почему Mentora
+          </div>
+
+          <h2 class="section-title">
+            Не просто занятия.<br>
+            <span class="gradient-text">Система роста.</span>
+          </h2>
+
+          <p class="section-description">
+            Мы объединяем преподавателей, технологии и аналитику,
+            чтобы обучение было понятным, измеримым и эффективным.
+          </p>
+
+        </div>
+
+
+        <div class="features-grid">
+
+          <div class="feature-card large">
+
+            <div class="feature-icon">✦</div>
+
+            <h3>
+              Умный подбор<br>
+              преподавателя
+            </h3>
+
+            <p>
+              Mentora анализирует вашу цель, уровень, бюджет,
+              предпочтения и доступное время, чтобы предложить
+              преподавателей с максимальным совпадением.
+            </p>
+
+            <div class="ai-visual">
+
+              <div class="ai-top">
+                <span class="ai-pulse"></span>
+                Mentora AI Match
+              </div>
+
+              <div class="ai-message">
+                Мне нужен преподаватель английского для IELTS.
+                Экзамен через 4 месяца, сейчас уровень B2.
+              </div>
+
+              <div class="ai-message user">
+                Отличная цель. Нашёл 14 преподавателей.
+                Вот три лучших совпадения.
+              </div>
+
+              <div class="mini-tutor">
+                <div class="avatar">АК</div>
+
+                <div class="mini-tutor-info">
+                  <div class="mini-tutor-name">
+                    Анна Ким
+                  </div>
+
+                  <div class="mini-tutor-sub">
+                    Совпадение профиля — 97%
+                  </div>
+                </div>
+
+                <div class="rating">
+                  ★ 4.9
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="feature-card">
+
+            <div class="feature-icon">◷</div>
+
+            <h3>Расписание без хаоса</h3>
+
+            <p>
+              Выбирайте свободное время преподавателя
+              и бронируйте урок в несколько кликов.
+            </p>
+
+            <div class="schedule-visual">
+
+              <div class="schedule-row">
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell active"></div>
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell active"></div>
+                <div class="schedule-cell"></div>
+              </div>
+
+              <div class="schedule-row">
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell active"></div>
+                <div class="schedule-cell active"></div>
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell active"></div>
+              </div>
+
+              <div class="schedule-row">
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell"></div>
+                <div class="schedule-cell active"></div>
+                <div class="schedule-cell active"></div>
+                <div class="schedule-cell"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="feature-card">
+
+            <div class="feature-icon">✓</div>
+
+            <h3>Безопасная среда</h3>
+
+            <p>
+              Профили преподавателей проверяются, а платежи
+              защищены. Ваши данные остаются конфиденциальными.
+            </p>
+
+            <div class="security-visual">
+
+              <div class="shield">✓</div>
+
+              <div>
+                <div class="security-title">
+                  Данные защищены
+                </div>
+
+                <div class="security-text">
+                  Secure payment · Verified profile
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOW IT WORKS
+    ====================================================== -->
+
+    <section class="section process" id="how">
+
+      <div class="container">
+
+        <div class="section-heading center">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Как это работает
+          </div>
+
+          <h2 class="section-title">
+            От цели до первого<br>
+            <span class="gradient-text">результата за минуты.</span>
+          </h2>
+
+        </div>
+
+
+        <div class="process-line"></div>
+
+
+        <div class="process-grid">
+
+          <div class="process-step">
+
+            <div class="step-number">
+              01
+
+              <div class="step-icon">⌕</div>
+            </div>
+
+            <h3>Опишите цель</h3>
+
+            <p>
+              Расскажите, чему хотите научиться,
+              какой у вас уровень и какой результат нужен.
+            </p>
+
+          </div>
+
+
+          <div class="process-step">
+
+            <div class="step-number">
+              02
+
+              <div class="step-icon">◇</div>
+            </div>
+
+            <h3>Получите подборку</h3>
+
+            <p>
+              Система предложит преподавателей,
+              которые лучше всего подходят под ваш запрос.
+            </p>
+
+          </div>
+
+
+          <div class="process-step">
+
+            <div class="step-number">
+              03
+
+              <div class="step-icon">◷</div>
+            </div>
+
+            <h3>Выберите время</h3>
+
+            <p>
+              Сравните расписание, стоимость и отзывы
+              и забронируйте удобный слот.
+            </p>
+
+          </div>
+
+
+          <div class="process-step">
+
+            <div class="step-number">
+              04
+
+              <div class="step-icon">↗</div>
+            </div>
+
+            <h3>Начните расти</h3>
+
+            <p>
+              Занимайтесь, отслеживайте прогресс
+              и корректируйте учебный план вместе с ментором.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         REVIEWS
+    ====================================================== -->
+
+    <section class="section" id="reviews">
+
+      <div class="ambient purple" style="right:-220px; top:150px;"></div>
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Истории студентов
+          </div>
+
+          <h2 class="section-title">
+            Результаты говорят<br>
+            <span class="gradient-text">сами за себя.</span>
+          </h2>
+
+        </div>
+
+
+        <div class="testimonial-grid">
+
+          <article class="testimonial">
+
+            <div class="quote-mark">“</div>
+
+            <p class="testimonial-text">
+              За три месяца подняла IELTS с 6.0 до 7.5.
+              Самое ценное — преподаватель действительно
+              понимала мои слабые места, а не просто давала домашку.
+            </p>
+
+            <div class="testimonial-author">
+
+              <div class="author-avatar">
+                МА
+              </div>
+
+              <div>
+                <div class="author-name">
+                  Мадина Ахмедова
+                </div>
+
+                <div class="author-role">
+                  IELTS · 7.5
+                </div>
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <article class="testimonial">
+
+            <div class="quote-mark">“</div>
+
+            <p class="testimonial-text">
+              Наконец-то перестал бояться программирования.
+              За два месяца сделал первый полноценный проект
+              на Python и добавил его в портфолио.
+            </p>
+
+            <div class="testimonial-author">
+
+              <div class="author-avatar">
+                АР
+              </div>
+
+              <div>
+                <div class="author-name">
+                  Азамат Рахимов
+                </div>
+
+                <div class="author-role">
+                  Python · Junior
+                </div>
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <article class="testimonial">
+
+            <div class="quote-mark">“</div>
+
+            <p class="testimonial-text">
+              Я долго не могла найти преподавателя, с которым
+              совпадает стиль обучения. В Mentora нашла своего
+              ментора буквально за один вечер.
+            </p>
+
+            <div class="testimonial-author">
+
+              <div class="author-avatar">
+                ДК
+              </div>
+
+              <div>
+                <div class="author-name">
+                  Диана Каримова
+                </div>
+
+                <div class="author-role">
+                  UI/UX Design
+                </div>
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <section class="section cta">
+
+      <div class="container">
+
+        <div class="cta-card">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Ваш следующий уровень
+          </div>
+
+          <h2 class="cta-title">
+            Один правильный<br>
+            <span class="gradient-text">ментор может изменить всё.</span>
+          </h2>
+
+          <p class="cta-text">
+            Начните с вашей цели. Мы поможем найти человека,
+            который поможет превратить её в конкретный результат.
+          </p>
+
+          <button class="btn btn-primary cta-button" id="ctaBtn">
+            Найти преподавателя →
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+
+  <footer class="footer">
+
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+
+          <a href="#top" class="logo">
+            <span class="logo-mark"></span>
+            Mentora
+          </a>
+
+          <p class="footer-description">
+            Платформа персонального обучения,
+            которая соединяет студентов с сильными
+            преподавателями и менторами.
+          </p>
+
+        </div>
+
+
+        <div>
+
+          <div class="footer-title">
+            Платформа
+          </div>
+
+          <div class="footer-links">
+            <a href="#tutors">Преподаватели</a>
+            <a href="#categories">Направления</a>
+            <a href="#features">Возможности</a>
+            <a href="#how">Как это работает</a>
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <div class="footer-title">
+            Для преподавателей
+          </div>
+
+          <div class="footer-links">
+            <a href="#" class="coming-soon">Стать преподавателем</a>
+            <a href="#" class="coming-soon">Условия работы</a>
+            <a href="#" class="coming-soon">Центр помощи</a>
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <div class="footer-title">
+            Компания
+          </div>
+
+          <div class="footer-links">
+            <a href="#" class="coming-soon">О Mentora</a>
+            <a href="#" class="coming-soon">Блог</a>
+            <a href="#" class="coming-soon">Контакты</a>
+            <a href="#" class="coming-soon">Политика конфиденциальности</a>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer-bottom">
+
+        <span>
+          © 2026 Mentora. Все права защищены.
+        </span>
+
+        <span>
+          Создано для тех, кто хочет расти.
+        </span>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =======================================================
+       BOOKING MODAL
+  ======================================================== -->
+
+  <div class="modal" id="bookingModal" aria-hidden="true">
+
+    <div class="modal-card">
+
+      <button
+        class="modal-close"
+        id="modalClose"
+        aria-label="Закрыть"
+      >
+        ×
+      </button>
+
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        Бронирование урока
+      </div>
+
+      <h2 class="modal-title" style="margin-top:17px;">
+        Запишитесь на занятие
+      </h2>
+
+      <p class="modal-description">
+        Преподаватель:
+        <strong id="selectedTutor">Mentora</strong>
+      </p>
+
+
+      <form class="modal-form" id="bookingForm">
+
+        <div class="form-group">
+
+          <label for="studentName">
+            Ваше имя
+          </label>
+
+          <input
+            class="form-control"
+            id="studentName"
+            type="text"
+            placeholder="Введите имя"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="studentPhone">
+            Телефон
+          </label>
+
+          <input
+            class="form-control"
+            id="studentPhone"
+            type="tel"
+            placeholder="+998 90 123 45 67"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="lessonDate">
+            Предпочтительная дата
+          </label>
+
+          <input
+            class="form-control"
+            id="lessonDate"
+            type="date"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="lessonTime">
+            Время
+          </label>
+
+          <select
+            class="form-control"
+            id="lessonTime"
+            required
+          >
+            <option value="">Выберите время</option>
+            <option>10:00</option>
+            <option>11:30</option>
+            <option>13:00</option>
+            <option>15:00</option>
+            <option>17:00</option>
+            <option>18:30</option>
+            <option>20:00</option>
+          </select>
+
+        </div>
+
+
+        <button class="modal-submit" type="submit">
+          Отправить заявку
+        </button>
+
+      </form>
+
+
+      <div class="success-message" id="successMessage">
+        ✓ Заявка отправлена. Мы свяжемся с вами для подтверждения
+        времени занятия.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       TOAST
+  ======================================================== -->
+
+  <div class="toast" id="toast"></div>
+
+
+  <!-- =======================================================
+       JAVASCRIPT
+  ======================================================== -->
+
+  <script>
+    /* =========================================================
+       GSAP INITIALIZATION
+    ========================================================= */
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const prefersReducedMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    const header = document.getElementById("header");
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        header.classList.toggle("scrolled", window.scrollY > 40);
+      },
+      { passive: true }
+    );
+
+
+    /* =========================================================
+       MOBILE MENU
+    ========================================================= */
+
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+
+    menuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+
+      menuBtn.textContent =
+        navLinks.classList.contains("active")
+          ? "×"
+          : "☰";
+    });
+
+    document.querySelectorAll(".nav-links a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+        menuBtn.textContent = "☰";
+      });
+    });
+
+
+    /* =========================================================
+       SMOOTH ANCHOR SCROLL
+    ========================================================= */
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+
+      link.addEventListener("click", event => {
+
+        const targetId = link.getAttribute("href");
+
+        if (
+          !targetId ||
+          targetId === "#" ||
+          targetId.length < 2
+        ) {
+          return;
+        }
+
+        const target = document.querySelector(targetId);
+
+        if (!target) {
+          return;
+        }
+
+        event.preventDefault();
+
+        target.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start"
+        });
+
+      });
+
+    });
+
+
+    /* =========================================================
+       HERO ANIMATION
+    ========================================================= */
+
+    if (!prefersReducedMotion) {
+
+      const heroTimeline = gsap.timeline({
+        defaults: {
+          ease: "power3.out"
+        }
+      });
+
+      heroTimeline
+        .from(".hero-animate", {
+          y: 35,
+          opacity: 0,
+          duration: 0.85,
+          stagger: 0.12
+        })
+        .from(".hero-visual", {
+          y: 70,
+          opacity: 0,
+          rotateX: 12,
+          duration: 1.2,
+          ease: "power3.out"
+        }, "-=0.4");
+
+
+      gsap.to(".hero-glow-one", {
+        x: 100,
+        y: 70,
+        duration: 8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
+      gsap.to(".hero-glow-two", {
+        x: -70,
+        y: -50,
+        duration: 10,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
+    }
+
+
+    /* =========================================================
+       SCROLL REVEALS
+    ========================================================= */
+
+    if (!prefersReducedMotion) {
+
+      gsap.utils.toArray(
+        ".section-heading, .search-box, .tutor-card, .category-card, .feature-card, .process-step, .testimonial, .cta-card"
+      ).forEach(element => {
+
+        gsap.from(element, {
+          y: 45,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 87%",
+            once: true
+          }
+        });
+
+      });
+
+
+      gsap.utils.toArray(".tutors-grid, .category-grid, .process-grid, .testimonial-grid")
+        .forEach(grid => {
+
+          gsap.from(grid.children, {
+            y: 35,
+            opacity: 0,
+            duration: 0.65,
+            stagger: 0.08,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: grid,
+              start: "top 82%",
+              once: true
+            }
+          });
+
+        });
+
+
+      gsap.to(".hero-visual", {
+        y: 80,
+        rotateX: 2,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.2
+        }
+      });
+
+
+      gsap.to(".process-line", {
+        scaleX: 1,
+        transformOrigin: "left center",
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".process",
+          start: "top 65%",
+          end: "bottom 55%",
+          scrub: true
+        }
+      });
+
+    }
+
+
+    /* =========================================================
+       3D TILT
+    ========================================================= */
+
+    const tiltCards =
+      document.querySelectorAll(".tilt-card");
+
+    if (!prefersReducedMotion && window.innerWidth > 768) {
+
+      tiltCards.forEach(card => {
+
+        card.addEventListener("mousemove", event => {
+
+          const rect = card.getBoundingClientRect();
+
+          const x =
+            event.clientX - rect.left;
+
+          const y =
+            event.clientY - rect.top;
+
+          const rotateX =
+            ((y / rect.height) - 0.5) * -5;
+
+          const rotateY =
+            ((x / rect.width) - 0.5) * 5;
+
+          card.style.transform =
+            `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
+
+        });
+
+        card.addEventListener("mouseleave", () => {
+
+          card.style.transform =
+            "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)";
+
+        });
+
+      });
+
+    }
+
+
+    /* =========================================================
+       HERO DASHBOARD TILT
+    ========================================================= */
+
+    const heroVisual =
+      document.getElementById("heroVisual");
+
+    if (!prefersReducedMotion && window.innerWidth > 900) {
+
+      heroVisual.addEventListener("mousemove", event => {
+
+        const rect =
+          heroVisual.getBoundingClientRect();
+
+        const x =
+          (event.clientX - rect.left) / rect.width - 0.5;
+
+        const y =
+          (event.clientY - rect.top) / rect.height - 0.5;
+
+        gsap.to(".dashboard-shell", {
+          rotateY: x * 4,
+          rotateX: 5 - y * 3,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+
+      });
+
+      heroVisual.addEventListener("mouseleave", () => {
+
+        gsap.to(".dashboard-shell", {
+          rotateY: 0,
+          rotateX: 5,
+          duration: 0.7,
+          ease: "power3.out"
+        });
+
+      });
+
+    }
+
+
+    /* =========================================================
+       TUTOR FILTERS
+    ========================================================= */
+
+    const filterButtons =
+      document.querySelectorAll(".filter-pill");
+
+    const tutorCards =
+      document.querySelectorAll(".tutor-card");
+
+    const resultCount =
+      document.getElementById("resultCount");
+
+    filterButtons.forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        filterButtons.forEach(item => {
+          item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        const filter =
+          button.dataset.filter;
+
+        let visibleCount = 0;
+
+        tutorCards.forEach(card => {
+
+          const matches =
+            filter === "all" ||
+            card.dataset.category === filter;
+
+          if (matches) {
+
+            visibleCount++;
+
+            card.style.display = "";
+
+            if (!prefersReducedMotion) {
+
+              gsap.fromTo(
+                card,
+                {
+                  opacity: 0,
+                  y: 15
+                },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.35
+                }
+              );
+
+            }
+
+          } else {
+
+            card.style.display = "none";
+
+          }
+
+        });
+
+        resultCount.textContent =
+          visibleCount;
+
+      });
+
+    });
+
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    const searchButton =
+      document.getElementById("searchButton");
+
+    const subjectInput =
+      document.getElementById("subjectInput");
+
+    const levelSelect =
+      document.getElementById("levelSelect");
+
+    const priceSelect =
+      document.getElementById("priceSelect");
+
+
+    function performSearch() {
+
+      const subject =
+        subjectInput.value.trim().toLowerCase();
+
+      const level =
+        levelSelect.value;
+
+      const price =
+        priceSelect.value;
+
+      let visibleCount = 0;
+
+      tutorCards.forEach(card => {
+
+        const cardText =
+          card.textContent.toLowerCase();
+
+        const category =
+          card.dataset.category;
+
+        const subjectMatch =
+          !subject ||
+          cardText.includes(subject) ||
+          (
+            subject.includes("анг") &&
+            category === "english"
+          ) ||
+          (
+            subject.includes("мат") &&
+            category === "math"
+          ) ||
+          (
+            subject.includes("python") &&
+            category === "programming"
+          ) ||
+          (
+            subject.includes("программ") &&
+            category === "programming"
+          ) ||
+          (
+            subject.includes("дизайн") &&
+            category === "design"
+          );
+
+        let priceMatch = true;
+
+        if (price === "low") {
+          priceMatch =
+            cardText.includes("130 000") ||
+            cardText.includes("140 000");
+        }
+
+        if (price === "medium") {
+          priceMatch =
+            cardText.includes("180 000") ||
+            cardText.includes("200 000") ||
+            cardText.includes("220 000");
+        }
+
+        if (price === "high") {
+          priceMatch =
+            cardText.includes("250 000");
+        }
+
+        /*
+          В демо-версии level используется как
+          дополнительный фильтр по тексту карточки.
+        */
+
+        const levelMatch =
+          level === "all" ||
+          cardText.includes(
+            level === "beginner"
+              ? "нач"
+              : level === "intermediate"
+                ? "b1"
+                : "c1"
+          );
+
+        const visible =
+          subjectMatch &&
+          priceMatch &&
+          levelMatch;
+
+        if (visible) {
+
+          visibleCount++;
+
+          card.style.display = "";
+
+          if (!prefersReducedMotion) {
+
+            gsap.fromTo(
+              card,
+              {
+                opacity: 0,
+                y: 20
+              },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.4
+              }
+            );
+
+          }
+
+        } else {
+
+          card.style.display = "none";
+
+        }
+
+      });
+
+      resultCount.textContent =
+        visibleCount;
+
+      document
+        .getElementById("tutors")
+        .scrollIntoView({
+          behavior: prefersReducedMotion
+            ? "auto"
+            : "smooth",
+          block: "start"
+        });
+
+      showToast(
+        visibleCount
+          ? `Найдено преподавателей: ${visibleCount}`
+          : "По вашему запросу пока нет точного совпадения."
+      );
+
+    }
+
+
+    searchButton.addEventListener(
+      "click",
+      performSearch
+    );
+
+    subjectInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Enter") {
+          performSearch();
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    const modal =
+      document.getElementById("bookingModal");
+
+    const modalClose =
+      document.getElementById("modalClose");
+
+    const selectedTutor =
+      document.getElementById("selectedTutor");
+
+    const bookingForm =
+      document.getElementById("bookingForm");
+
+    const successMessage =
+      document.getElementById("successMessage");
+
+
+    function openBooking(tutor = "Mentora") {
+
+      selectedTutor.textContent =
+        tutor;
+
+      bookingForm.style.display =
+        "";
+
+      successMessage.classList.remove(
+        "show"
+      );
+
+      modal.classList.add("active");
+
+      modal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      document.body.classList.add(
+        "modal-open"
+      );
+
+    }
+
+
+    function closeBooking() {
+
+      modal.classList.remove(
+        "active"
+      );
+
+      modal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      document.body.classList.remove(
+        "modal-open"
+      );
+
+    }
+
+
+    document
+      .querySelectorAll(".book-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+            openBooking(
+              button.dataset.tutor
+            );
+          }
+        );
+
+      });
+
+
+    modalClose.addEventListener(
+      "click",
+      closeBooking
+    );
+
+
+    modal.addEventListener(
+      "click",
+      event => {
+
+        if (event.target === modal) {
+          closeBooking();
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Escape" &&
+          modal.classList.contains("active")
+        ) {
+          closeBooking();
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       BOOKING FORM
+    ========================================================= */
+
+    bookingForm.addEventListener(
+      "submit",
+      event => {
+
+        event.preventDefault();
+
+        bookingForm.style.display =
+          "none";
+
+        successMessage.classList.add(
+          "show"
+        );
+
+        setTimeout(() => {
+          bookingForm.reset();
+        }, 300);
+
+      }
+    );
+
+
+    /* =========================================================
+       HERO / CTA / HEADER BUTTONS
+    ========================================================= */
+
+    function goToSearch() {
+
+      document
+        .getElementById("search")
+        .scrollIntoView({
+          behavior: prefersReducedMotion
+            ? "auto"
+            : "smooth"
+        });
+
+      setTimeout(() => {
+        subjectInput.focus();
+      }, prefersReducedMotion ? 0 : 700);
+
+    }
+
+
+    document
+      .getElementById("heroSearchBtn")
+      .addEventListener(
+        "click",
+        goToSearch
+      );
+
+    document
+      .getElementById("headerStartBtn")
+      .addEventListener(
+        "click",
+        goToSearch
+      );
+
+    document
+      .getElementById("ctaBtn")
+      .addEventListener(
+        "click",
+        goToSearch
+      );
+
+
+    /* =========================================================
+       LOGIN DEMO
+    ========================================================= */
+
+    document
+      .getElementById("loginBtn")
+      .addEventListener(
+        "click",
+        () => {
+          showToast(
+            "Авторизация будет доступна в следующей версии."
+          );
+        }
+      );
+
+
+    /* =========================================================
+       FOOTER DEMO LINKS
+    ========================================================= */
+
+    document
+      .querySelectorAll(".coming-soon")
+      .forEach(link => {
+
+        link.addEventListener(
+          "click",
+          event => {
+
+            event.preventDefault();
+
+            showToast(
+              "Этот раздел находится в разработке."
+            );
+
+          }
+        );
+
+      });
+
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    const toast =
+      document.getElementById("toast");
+
+    let toastTimer;
+
+    function showToast(message) {
+
+      toast.textContent =
+        message;
+
+      toast.classList.add(
+        "show"
+      );
+
+      clearTimeout(toastTimer);
+
+      toastTimer =
+        setTimeout(() => {
+
+          toast.classList.remove(
+            "show"
+          );
+
+        }, 3000);
+
+    }
+
+
+    /* =========================================================
+       DATE MINIMUM
+    ========================================================= */
+
+    const lessonDate =
+      document.getElementById("lessonDate");
+
+    const today =
+      new Date();
+
+    const yyyy =
+      today.getFullYear();
+
+    const mm =
+      String(
+        today.getMonth() + 1
+      ).padStart(2, "0");
+
+    const dd =
+      String(
+        today.getDate()
+      ).padStart(2, "0");
+
+    lessonDate.min =
+      `${yyyy}-${mm}-${dd}`;
+
+
+    /* =========================================================
+       INITIAL REFRESH
+    ========================================================= */
+
+    window.addEventListener(
+      "load",
+      () => {
+
+        ScrollTrigger.refresh();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
